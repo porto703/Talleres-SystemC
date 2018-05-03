@@ -7,7 +7,6 @@ cd systemc-2.3.1a
 make -j4
 sudo make install
 
-
 Al crear nuevo proyecto Reemplazar:
 
 TEMPLATE = app
