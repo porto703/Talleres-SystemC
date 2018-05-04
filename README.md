@@ -1,5 +1,5 @@
 # Talleres-SystemC
-Instalar en una distribución Linux (Ubuntu):
+Instalar SystemC en una distribución Linux (Ubuntu):
 wget http://www.accellera.org/images/downloads/standards/systemc/systemc-2.3.1a.tar.gz
 tar xfv systemc-2.3.1a.tar.gz
 cd systemc-2.3.1a
@@ -7,7 +7,17 @@ cd systemc-2.3.1a
 make -j4
 sudo make install
 
-Al crear nuevo proyecto Reemplazar:
+**********************************************
+QT Creator:
+Versión Open Source disponible en https://www.qt.io/download-qt-for-application-development
+Algunas distribuciones Linux proveen un paquete de instalación. (Ubuntu)
+$ sudo apt-get install qtcreator 
+
+Abrir QTCreator.
+New Project
+Non-Qt Project -> Plain C++ Application
+Abrir: [project_name].pro
+Al crear nuevo proyecto Reemplazar (Todo exepto SOURCES += main.cpp):
 
 TEMPLATE = app
 CONFIG += console
@@ -38,3 +48,16 @@ macx: {
 INCLUDEPATH += $${systemc_home}/include
 LIBS += -L$${systemc_home}/lib-$${systemc_target_arch} -lsystemc
 
+***************************************
+en main.cpp escribir primer programa de prueba, para mostrar en consola un mensaje de éxito:
+
+#include <systemc>
+
+using namespace sc_core;
+
+int sc_main(int argc, char* argv[])
+{
+  sc_start(10, SC_SEC);
+  std::cout<<"Instalacion de SystemC correcta"<<std::endl;
+  return 0;
+}
