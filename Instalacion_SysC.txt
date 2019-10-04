@@ -8,6 +8,16 @@ make -j4
 sudo make install
 
 **********************************************
+Opcional Instalar SystemC-AMS
+Download systemcAMS from 
+https://www.coseda-tech.com/systemc-ams-proof-of-concept
+tar xvf systemc-ams-2.1.tar.gz
+cd systemc-ams-2.1
+./configure --prefix=/opt/systemc-ams/ --with-systemc=/opt/systemc
+make -j4
+sudo make install
+
+**********************************************
 QT Creator:
 Versión Open Source disponible en https://www.qt.io/download-qt-for-application-development
 Algunas distribuciones Linux proveen un paquete de instalación. (Ubuntu)
@@ -34,19 +44,34 @@ isEmpty(systemc_target_arch) {
     systemc_target_arch = linux64
 }
 
+systemc_ams_home = $$(SYSTEMCAMS_HOME)
+isEmpty(systemc_ams_home) {
+    systemc_ams_home = /opt/systemc-ams
+}
+
+systemc_ams_target_arch = $$(SYSTEMCAMS_TARGET_ARCH)
+isEmpty(systemc_ams_target_arch) {
+    systemc_ams_target_arch = linux64
+}
+
 unix:!macx {
     QMAKE_CXXFLAGS += -std=c++11 -O0 -g
     QMAKE_RPATHDIR += $${systemc_home}/lib-$${systemc_target_arch}
+    QMAKE_RPATHDIR += $${systemc_ams_home}/lib-$${systemc_ams_target_arch}
     QMAKE_CXXFLAGS += -isystem $${systemc_home}/include
+    QMAKE_CXXFLAGS += -isystem $${systemc_ams_home}/include
 }
 
 macx: {
     systemc_target_arch = macosx64
+    systemc_ams_target_arch = macosx64
     QMAKE_CXXFLAGS += -std=c++0x -stdlib=libc++ -O0 -g
 }
 
 INCLUDEPATH += $${systemc_home}/include
+INCLUDEPATH += $${systemc_ams_home}/include
 LIBS += -L$${systemc_home}/lib-$${systemc_target_arch} -lsystemc
+LIBS += -L$${systemc_ams_home}/lib-$${systemc_ams_target_arch} -lsystemc-ams
 
 ***************************************
 en main.cpp escribir primer programa de prueba, para mostrar en consola un mensaje de éxito:
@@ -59,5 +84,20 @@ int sc_main(int argc, char* argv[])
 {
   sc_start(10, SC_SEC);
   std::cout<<"Instalacion de SystemC correcta"<<std::endl;
+  return 0;
+}
+
+
+*****************************************
+#include <systemc>
+#include <systemc-ams>
+
+using namespace sc_core;
+
+int sc_main(int argc, char* argv[])
+{
+  sca_tdf::sca_signal<bool> sig1;
+  sc_start(10, SC_SEC);
+  std::cout<<"Instalacion de SystemC y SystemC-AMS correcta"<<std::endl;
   return 0;
 }
